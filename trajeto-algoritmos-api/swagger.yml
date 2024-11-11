@@ -1,0 +1,119 @@
+openapi: "3.0.0"
+info:
+  title: "Trajeto Algoritmos"
+  version: "1.0.0"
+components:
+  responses:
+    Forbidden:
+      description: "Access token is missing or invalid"
+    Accepted:
+      description: "The request was accepted"
+    Created:
+      description: "The resource has been created"
+    NotFound:
+      description: "The resource has been created"
+    NotAcceptable:
+      description: "The resource has been created"
+  securitySchemes:
+    BearerAuth:
+      type: "http"
+      scheme: "bearer"
+  schemas:
+    Any:
+      description: "Any JSON object not defined as schema"
+    AccessToken:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+          example: "string"
+        name:
+          type: "string"
+          example: "John Doe"
+        token:
+          type: "string"
+          example: "string"
+        abilities:
+          type: "array"
+          items:
+            type: "string"
+            example: "string"
+        last_used_at:
+          $ref: "#/components/schemas/Date"
+          example: "string"
+        expires_at:
+          $ref: "#/components/schemas/Date"
+          example: "string"
+      description: "Model"
+    BaseResponse<T>:
+      type: "object"
+      properties:
+        data:
+          $ref: "#/components/schemas/T"
+          example: null
+          nullable: false
+      description: "Interface"
+    AuthRequest:
+      type: "object"
+      properties:
+        token_id:
+          type: "string"
+          example: null
+          nullable: false
+      description: "Interface"
+    enums:
+      type: "object"
+      properties: {}
+      description: "Model"
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "number"
+          example: 117
+        provider_id:
+          type: "string"
+          example: "string"
+        name:
+          type: "string"
+          example: "John Doe"
+        email:
+          type: "string"
+          example: "johndoe@example.com"
+          format: "email"
+        password:
+          type: "string"
+          example: "S3cur3P4s5word!"
+          format: "password"
+        profile_id:
+          type: "number"
+          example: "1"
+          enum:
+            - "1"
+            - "2"
+        created_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+        updated_at:
+          type: "string"
+          example: "2021-03-23T16:13:08.489+01:00"
+          format: "date-time"
+      description: "Model"
+paths:
+  /auth:
+    post:
+      summary: " (route.ts)"
+      description: ""
+      parameters: []
+      tags: []
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json: {}
+      security: []
+      requestBody:
+        content:
+          application/json: {}
+tags: []
