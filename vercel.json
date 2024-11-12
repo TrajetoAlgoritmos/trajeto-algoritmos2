@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+      {
+        "source": "/(.*)", 
+        "destination": "trajetoalgoritmos.vps-kinghost.net:2053" 
+      }
+    ]
+  }
+  
