@@ -2,7 +2,7 @@
     "rewrites": [
       {
         "source": "/(.*)", 
-        "destination": "http://trajetoalgoritmos.vps-kinghost.net" 
+        "destination": "http://trajetoalgoritmos.vps-kinghost.net:2053" 
       }
     ]
   }
