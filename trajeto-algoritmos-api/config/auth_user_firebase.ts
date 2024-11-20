@@ -4,13 +4,13 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 export default async function getIdTokens() {
   const firebaseConfig = {
-    apiKey: 'AIzaSyBQu3rxA7dxa_6OJm8u6--lMIUOlqal3B4',
-    authDomain: 'trajeto-algoritmos-fe5a4.firebaseapp.com',
-    projectId: 'trajeto-algoritmos-fe5a4',
-    storageBucket: 'trajeto-algoritmos-fe5a4.appspot.com',
-    messagingSenderId: '630024241939',
-    appId: '1:630024241939:web:94a0a7e2d35450dd7e10e6',
-    measurementId: 'G-NXZRRX5NRH',
+    apiKey: 'AIzaSyC47YUXIFeXenQQvgUHrrcnfBaofnE3O4M',
+    authDomain: 'trajeto-algoritmos.firebaseapp.com',
+    projectId: 'trajeto-algoritmos',
+    storageBucket: 'trajeto-algoritmos.appspot.com',
+    messagingSenderId: '70964166016',
+    appId: '1:70964166016:web:06cff243ddb135a5b15565',
+    measurementId: 'G-3YYHRRL9NZ',
   }
   const app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
