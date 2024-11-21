@@ -2,7 +2,7 @@
     "rewrites": [
       {
         "source": "/(.*)", 
-        "destination": "http://177.153.51.110:2053/" 
+        "destination": "https://177.153.51.110:2053/" 
       }
     ]
   }
