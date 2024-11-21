@@ -19,12 +19,8 @@ import TrackController from '../app/controllers/tracks_controller.js'
 import UserController from '../app/controllers/user_controller.js'
 
 
-router.get('/', async () => {
-  return { message: 'Welcome to AdonisJS!' }
-})
 
-
-router.post('/auth', new UserController().auth)
+router.post('/', new UserController().auth)
 
 router.group(() => {
   router.post('/submissions', new JudgeController().submissions)
