@@ -20,7 +20,7 @@ import UserController from '../app/controllers/user_controller.js'
 
 
 
-router.post('/', new UserController().auth)
+router.post('/auth', new UserController().auth)
 
 router.group(() => {
   router.post('/submissions', new JudgeController().submissions)
