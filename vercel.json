@@ -1,8 +1,8 @@
 {
     "rewrites": [
       {
-        "source": "/(.*)", 
-        "destination": "https://177.153.51.110:2053/" 
+        "source": "/", 
+        "destination": "https:// trajetoalgoritmos.vps-kinghost.net" 
       }
     ]
   }
