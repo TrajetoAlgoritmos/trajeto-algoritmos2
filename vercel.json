@@ -1,8 +1,8 @@
 {
     "rewrites": [
       {
-        "source": "/auth", 
-        "destination": "http://trajetoalgoritmos.vps-kinghost.net:2053" 
+        "source": "/trajeto-algoritmos-api/auth", 
+        "destination": "https://trajetoalgoritmos.vps-kinghost.net:2053" 
       }
     ]
   }
