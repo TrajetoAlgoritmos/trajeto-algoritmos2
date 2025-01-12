@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/no-for-loop */
-import { initializeApp } from 'firebase/app'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default async function getIdTokens() {
   const firebaseConfig = {

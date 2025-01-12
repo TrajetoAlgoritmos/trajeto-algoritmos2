@@ -10,12 +10,9 @@
 |
 */
 
-import 'reflect-metadata'
 import { Ignitor, prettyPrintError } from '@adonisjs/core'
-import { join, dirname } from 'node:path'
-import { readFileSync } from 'node:fs'
-import { createServer } from 'node:https'
-import { fileURLToPath } from 'node:url'
+import { createServer } from 'node:http'
+import 'reflect-metadata'
 
 /**
  * URL to the application root. AdonisJS need it to resolve
@@ -33,11 +30,6 @@ const IMPORTER = (filePath: string) => {
   }
   return import(filePath)
 }
-const fileName = fileURLToPath(import.meta.url)
-const dirName = dirname(fileName)
-const privateKey = readFileSync(join(dirName + '/sslCert/server.key'), 'utf8')
-const certificate = readFileSync(join(dirName + '/sslCert/server.crt'), 'utf8')
-const credentials = { key: privateKey, cert: certificate }
 
 new Ignitor(APP_ROOT, { importer: IMPORTER })
   .tap((app) => {
@@ -49,7 +41,7 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
   })
   .httpServer()
   .start((handler) => {
-    return createServer(credentials, handler)
+    return createServer(handler)
   })
   .catch((error) => {
     process.exitCode = 1
