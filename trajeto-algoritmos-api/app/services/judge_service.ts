@@ -6,8 +6,9 @@ const runAlgorithm = async (
   sourceCode: string,
   languageId: string,
   stdin: string
-): Promise<AlgorithmRunResponse> => {
-  const response = await axios.post(
+): Promise<AlgorithmRunResponse | null>  => {
+  try {
+    const response = await axios.post(
     env.get('JUDGE_HOST') + '/submissions?base64_encoded=true&wait=true',
     {
       source_code: sourceCode,
@@ -23,6 +24,11 @@ const runAlgorithm = async (
   )
 
   return response.data as AlgorithmRunResponse
+  } catch (error) {
+    console.log("erro jugde 0: ", error);
+    return null;
+  }
+  
 }
 
 export { runAlgorithm }

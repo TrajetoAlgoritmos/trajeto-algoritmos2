@@ -1,10 +1,11 @@
-import env from '#start/env'
-import { HttpContext } from '@adonisjs/core/http'
-import axios from 'axios'
+import env from '#start/env';
+import { HttpContext } from '@adonisjs/core/http';
+import axios from 'axios';
 
 export default class JudgeController {
   async submissions({ request }: HttpContext) {
     const { sourceCode, languageId, stdin } = request.all()
+    console.log("label host: ", env.get('JUDGE_HOST') + '/submissions?base64_encoded=true&wait=true',);
 
     const response = await axios.post(
       env.get('JUDGE_HOST') + '/submissions?base64_encoded=true&wait=true',

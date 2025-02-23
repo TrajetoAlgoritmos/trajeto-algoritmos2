@@ -1,31 +1,34 @@
-import { HttpContext } from '@adonisjs/core/http'
-import Answer from '../models/answer.js'
-import TrackAlgorithm from '#models/track_algorithm'
 import AlgorithmTest from '#models/algorithm_test'
+import AnswerAlgorithmTest from '#models/answer_algorithm_tests'
 import { AnswerStatus, ProfileId } from '#models/enums'
+import Track from '#models/track'
+import TrackAlgorithm from '#models/track_algorithm'
+import TrackUser from '#models/track_user'
 import { runAlgorithm } from '#services/judge_service'
 import { JudgeStatusCode } from '#services/judge_status'
+import { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
-import AnswerAlgorithmTest from '#models/answer_algorithm_tests'
-import Track from '#models/track'
-import TrackUser from '#models/track_user'
+import Answer from '../models/answer.js'
 
 export default class AnswerController {
   // Create
   async create({ request, auth }: HttpContext) {
     const user = await auth.authenticate()
-
+    console.log("Linha 17");
     const userId = user.id
     const data = request.only(['track_algorithms_id', 'content', 'languageId'])
 
     const trackAlgorithms = await TrackAlgorithm.findOrFail(data.track_algorithms_id)
+    console.log("Linha 22");
 
     const track = await Track.findOrFail(trackAlgorithms.trackId)
+    console.log("Linha 25");
 
     const trackUsers = await TrackUser.query()
       .where('user_id', userId)
       .where('track_id', track.id)
       .first()
+      console.log("Linha 31");
 
     if (!trackUsers) {
       throw new Error('User is not enrolled in the track')
@@ -42,6 +45,7 @@ export default class AnswerController {
     if (track.deletedAt) {
       throw new Error('Track has been deleted')
     }
+    console.log("Linha 48");
 
     let answer = await Answer.create({
       trackAlgorithmId: data.track_algorithms_id,
@@ -49,8 +53,10 @@ export default class AnswerController {
       user_id: userId,
       status: AnswerStatus.running,
     })
+    console.log("Linha 56");
 
     const tests = await AlgorithmTest.query().where('algorithm_id', trackAlgorithms.algorithmId)
+    console.log("Linha 59");
 
     if (!tests.length) {
       answer.merge({
@@ -63,6 +69,7 @@ export default class AnswerController {
         answer: answer,
       }
     }
+    console.log("Linha 72");
 
     // eslint-disable-next-line no-array-constructor
     let results = new Array<AnswerAlgorithmTest>()
@@ -75,6 +82,7 @@ export default class AnswerController {
         content: data.content,
         status: AnswerStatus.running,
       })
+      console.log("Linha 85");
 
       const newLength = results.push(aat)
       const index = newLength - 1
@@ -84,6 +92,11 @@ export default class AnswerController {
         data.languageId,
         Buffer.from(test.input).toString('base64')
       )
+      console.log("Linha 95");
+
+      if(!result){
+        return null;
+      }
 
       if (result.status.id !== JudgeStatusCode.ACEITO) {
         answer.merge({
@@ -100,6 +113,7 @@ export default class AnswerController {
 
         continue
       }
+      console.log("Linha 116");
 
       const output = Buffer.from(result.stdout, 'base64').toString('utf-8')
 
@@ -111,6 +125,7 @@ export default class AnswerController {
       })
 
       await aat.save()
+      console.log("Linha 128");
 
       results[index] = aat
     }
