@@ -1,6 +1,6 @@
+import Feedback from '#models/feedback'
 import { HttpContext } from '@adonisjs/core/http'
 import { ProfileId } from '../models/enums.js'
-import Feedback from '#models/feedback'
 
 export default class FeedbackController {
   // Create

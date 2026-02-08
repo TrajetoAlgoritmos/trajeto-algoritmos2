@@ -52,6 +52,12 @@ function TracksTable() {
                 Estatísticas da trilha
               </th>
               <th
+                align='center'
+                className='border-b font-medium p-4 pr-8 pt-0 pb-3 text-center'
+              >
+                Relatório
+              </th>
+              <th
                 align='right'
                 className='border-b font-medium p-4 pr-8 pt-0 pb-3 text-right'
               >
@@ -88,6 +94,14 @@ function TracksTable() {
                   >
                     <Link href={`/professor/trilhas/estatisticas/${id}`}>
                       <Icon name='ExternalLink' />
+                    </Link>
+                  </td>
+                  <td
+                    align='center'
+                    className='border-b border-slate-200 p-4 pr-8'
+                  >
+                    <Link href={`/professor/trilhas/estatisticas/${id}/relatorio`}>
+                      <Icon name='FileText' />
                     </Link>
                   </td>
                   <td

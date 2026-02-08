@@ -36,7 +36,7 @@ router.group(() => {
   router.get('/algorithms/:id', new AlgorithmController().show)
   router.put('/algorithms/:id', new AlgorithmController().update)
   router.delete('/algorithms/:id', new AlgorithmController().destroy)
-
+  router.get('/tracks/summary', new TrackController().totaltrilhas)  
   router.post('/tracks', new TrackController().create)
   router.get('/tracks', new TrackController().index)
   router.get('/tracks/:id', new TrackController().show)
@@ -44,11 +44,10 @@ router.group(() => {
   router.delete('/tracks/:id', new TrackController().destroy)
   router.post('/tracks/join', new TrackController().join)
   router.post('/tracks/checkCodigo', new TrackController().findTrackByCodigo)
-
+  router.get('/tracks/:id/difficulty-notifications', new TrackController().getTrackDifficultyNotification)
   router.post('/tracks/algorithm/add', new TrackController().addAlgorithm)
   router.post('/tracks/algorithm/remove', new TrackController().removeAlgorithm)
   router.post('/tracks/trackUsersSummary', new TrackController().trackUsersSummary)
-
   router.post('/answers', new AnswerController().create)
   router.get('/student/tracks/:id', new TrackController().showByStudent)
   router.get('/student/joinedTracks', new TrackController().tracksJoined)
@@ -62,6 +61,7 @@ router.group(() => {
   router.get('/feedback/getByTrack', new FeedbackController().feedbackByTrack)
   router.get('/feedback/getByStudent', new FeedbackController().feedbackByStudent)
   router.get('/feedback/getByGroup', new FeedbackController().feedbackByGroup)
+
 })
 
 router.get('/token', async ({ response }: HttpContext) => {

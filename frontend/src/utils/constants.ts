@@ -13,6 +13,11 @@ export const menus = {
       label: 'Algoritmos',
       icon: 'Code2',
     },
+    {
+      href: '/professor/notificacoes',  // nova rota para notificações
+      label: 'Notificações',
+      icon: 'Bell',  // ou o nome do ícone de sino que sua biblioteca usar
+    },
   ],
   student: [
     {

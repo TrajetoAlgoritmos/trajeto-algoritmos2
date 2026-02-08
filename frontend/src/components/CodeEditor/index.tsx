@@ -1,5 +1,15 @@
 'use client';
 
+interface Judge0Response {
+  stdout?: string;
+  stderr?: string;
+  compile_output?: string;
+  status?: {
+    id: number;
+    description: string;
+  };
+}
+
 import { useTracks } from '@/hooks/useTracks';
 import { defineTheme } from '@/lib/theme/defineTheme';
 import { successToast } from '@/lib/toasts';
@@ -77,26 +87,36 @@ function CodeEditor() {
   }, []);
 
   const handleRunCode = useCallback(async () => {
-    if (!code) return;
-    try {
-      setLoadingRun(true);
-      resetState();
-      const response = await submissionService({
-        stdin: customInput ? btoa(customInput) : '',
-        languageId: 75,
-        sourceCode: btoa(code),
-      });
-      if (response?.data?.data?.stdout) {
-        setOutput(atob(response.data.data.stdout));
-      } else {
-        setErrorMessage(CODE_ERROR);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoadingRun(false);
+  if (!code) return;
+  try {
+    setLoadingRun(true);
+    resetState();
+    const response = await submissionService({
+      stdin: customInput ? btoa(customInput) : '',
+      languageId: 75,
+      sourceCode: btoa(code),
+    });
+
+    const result = response?.data?.data as Judge0Response;
+    if (result?.stdout) {
+      setOutput(atob(result.stdout));
+    } else if (result?.stderr) {
+      setErrorMessage(atob(result.stderr)); // <-- erro de execução
+    } else if (result?.compile_output) {
+      setErrorMessage(atob(result.compile_output)); // <-- erro de compilação (ex: faltou ponto e vírgula)
+    } else if (result?.status?.description) {
+      setErrorMessage(result.status.description); // <-- fallback: status da submissão
+    } else {
+      setErrorMessage(CODE_ERROR); // <-- fallback genérico
     }
-  }, [code, customInput, resetState]);
+  } catch (error) {
+    console.error(error);
+    setErrorMessage(CODE_ERROR); // <-- erro inesperado (ex: falha de rede)
+  } finally {
+    setLoadingRun(false);
+  }
+}, [code, customInput, resetState]);
+
 
   const handleSave = useCallback(async () => {
     if (!currentTrack?.status && !startTrack) return;

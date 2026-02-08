@@ -52,21 +52,21 @@ function TrackStatsView({ data }: TrackStatsViewProps) {
     labels: algorithmData.map((alg) => alg.algorithm_title),
     datasets: [
       {
-        label: 'Tentativas corretas',
+        label: 'Submissões aprovadas no teste',
         data: algorithmData.map((alg) => alg.correct_attempts),
         backgroundColor: 'rgba(75, 192, 192)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Tentativas incorretas',
+        label: 'Submissões reprovadas no teste',
         data: algorithmData.map((alg) => alg.incorrect_attempts),
         backgroundColor: 'rgba(255, 99, 132)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Tentativas com erro',
+        label: 'Submissões com erros de execução',
         data: algorithmData.map((alg) => alg.error_attempts),
         backgroundColor: 'rgba(255, 206, 86)',
         borderColor: 'rgba(255, 206, 86, 1)',
@@ -92,7 +92,7 @@ function TrackStatsView({ data }: TrackStatsViewProps) {
       },
       title: {
         display: true,
-        text: 'Tentativas por algoritmo',
+        text: 'Submissões por exercício',
       },
     },
   };

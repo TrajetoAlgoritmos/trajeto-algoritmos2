@@ -38,7 +38,7 @@ function Auth() {
         </div>
         <div className='absolute w-full flex justify-center items-center flex-col bottom-8 gap-2 p-2'>
           <span className='text-xs text-gray-500 font-medium'>
-            2024 Trajeto Algoritmos
+            2025 Trajeto Algoritmos
           </span>
           <span className='text-xs text-gray-500 text-center'>
             Desenvolvidor por:{' '}
@@ -63,7 +63,14 @@ function Auth() {
               target='_blank'
               className='font-medium hover:underline duration-300'
             >
-              Professora Carla
+              Luis Fernando Alves Corrêa
+            </a>,{' '}
+            <a
+              href='https://github.com/'
+              target='_blank'
+              className='font-medium hover:underline duration-300'
+            >
+              Carla Adriana Barvinski
             </a>
           </span>
         </div>

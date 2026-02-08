@@ -12,5 +12,5 @@ sudo docker compose up -d mysql
 sleep 15s
 
 # Start all services defined in the docker-compose file
-sudo docker compose up --build
+sudo docker compose up 
 sleep 5s

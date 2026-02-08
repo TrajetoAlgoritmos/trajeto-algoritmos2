@@ -5,11 +5,10 @@ import { AnswerStatus, ProfileId } from '#models/enums'
 import TrackAlgorithm from '#models/track_algorithm'
 import TrackUser from '#models/track_user'
 import { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 import Track from '../models/track.js'
-
 import { getUsersSummaryByTrack } from '../usecases/get_users_summary_by_track.js'
-
 export default class TrackController {
   async join({ auth, request }: HttpContext) {
     const { codigo } = request.all()
@@ -447,4 +446,145 @@ export default class TrackController {
       data: await getUsersSummaryByTrack(trackId),
     }
   }
+  async totaltrilhas({}: HttpContext) {
+    const tracks = await Track.query().select(['id', 'title'])
+
+    return {
+      data: tracks,
+    }
+  }
+
+   async getTrackDifficultyNotification({ params, auth }: HttpContext) {
+    const user = await auth.authenticate()
+
+    if (user.profileId !== ProfileId.teacher) {
+      throw new Error('Unauthorized: Only teacher can get notifications')
+    }
+
+    try {
+      const rtrack = await Track.query()
+        .where('tracks.id', params.id)
+        .where('tracks.user_id', user.id)
+        .whereNull('tracks.deleted_at')
+        .preload('students', (query) => {
+          query.select('id', 'name', 'email')
+        })
+        .preload('algorithms', (query) => {
+          query.select('id', 'title')
+        })
+        .first()
+
+      if (!rtrack) {
+        return {
+          error: 'Track not found or not linked to this teacher',
+        }
+      }
+
+      const track = rtrack.toJSON()
+      const notificacoes = []
+
+      for (const student of track.students) {
+        let totalTentativas = 0
+        let totalErrosExecucao = 0
+        let totalErrosLogico = 0
+        let ultimaTentativa: Date | null = null
+
+
+        for (const algorithm of track.algorithms) {
+          const trackAlgorithm = await TrackAlgorithm.query()
+            .where('trackId', track.id)
+            .where('algorithmId', algorithm.id)
+            .first()
+
+          if (!trackAlgorithm) {
+            console.log(`[WARN] trackAlgorithm não encontrado para algoritmo ${algorithm.id} na trilha ${track.id}`)
+            continue
+          }
+
+          const answers = await Answer.query()
+            .where('track_algorithm_id', trackAlgorithm.id)
+            .where('user_id', student.id)
+
+
+          for (const answer of answers) {
+            totalTentativas++
+
+            if (answer.status === AnswerStatus.error) {
+              totalErrosExecucao++
+            }
+
+            if (answer.status === AnswerStatus.incorrect) {
+              totalErrosLogico++
+            }
+
+            const respostaDate = answer.createdAt.toJSDate()
+            if (!ultimaTentativa || respostaDate > ultimaTentativa) {
+              ultimaTentativa = respostaDate
+            }
+          }
+        }
+
+        const totalErros = totalErrosExecucao + totalErrosLogico
+
+        const mediaErroExecucaoPercentual =
+          totalTentativas > 0 ? (totalErrosExecucao / totalTentativas) * 100 : 0
+
+        const mediaErroLogicoPercentual =
+          totalTentativas > 0 ? (totalErrosLogico / totalTentativas) * 100 : 0
+
+        const mediaErroPercentual =
+          totalTentativas > 0 ? (totalErros / totalTentativas) * 100 : 0
+
+        function getDificuldade(media: number) {
+          if (media <= 33) return 'Nenhuma'
+          else if (media <= 50) return 'Leve'
+          else if (media <= 70) return 'Moderada'
+          else return 'Avançada'
+        }
+
+        notificacoes.push({
+          alunoId: student.id,
+          nome: student.name,
+          mediaErroExecucaoPercentual: mediaErroExecucaoPercentual.toFixed(2),
+          dificuldadeExecucao: getDificuldade(mediaErroExecucaoPercentual),
+          mediaErroLogicoPercentual: mediaErroLogicoPercentual.toFixed(2),
+          dificuldadeLogico: getDificuldade(mediaErroLogicoPercentual),
+          mediaErroPercentual: mediaErroPercentual.toFixed(2),
+          ultimaTentativa: ultimaTentativa?.toISOString() ?? null,
+        })
+      }
+
+      return {
+        trackId: track.id,
+        trackTitle: track.title,
+        notificacoes,
+      }
+    } catch (error) {
+      console.error('Erro ao gerar notificações de dificuldade:', error)
+      return {
+        error: 'Erro interno ao processar as notificações',
+        message: error.message,
+      }
+    }
+  }
+
+
+
+ async getProfessorTracks({ auth, response }: HttpContext) {
+  const user = auth.user
+
+  if (!user) {
+    return response.unauthorized({ message: 'Usuário não autenticado' })
+  }
+
+  const tracks = await db
+    .from('tracks')
+    .innerJoin('tracks', 'tracks.id', 'tracks.track_id')
+    .where('tracks.user_id', user.id)
+    .select('tracks.id', 'tracks.nome')
+
+  return response.ok(tracks)
+}
+
+
 }

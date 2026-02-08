@@ -13,6 +13,7 @@ export enum JudgeStatusCode {
   RUNTIME_ERROR_OTHER = 12,
   INTERNAL_ERROR = 13,
   EXEC_FORMAT_ERROR = 14,
+
 }
 export function getStatusDescription(statusCode: JudgeStatusCode): string {
   switch (statusCode) {

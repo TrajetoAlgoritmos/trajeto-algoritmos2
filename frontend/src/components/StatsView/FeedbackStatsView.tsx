@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -36,7 +37,9 @@ const feelings = [
   { emoji: '🤩', alt: 'Animado', value: 12, color: '#512DA8' },
 ];
 
+
 function reduceGroup(array: IFeedbackByTrack[]) {
+
   return array.reduce(
     (acc, feedback) => {
       acc[feedback.value] = (acc[feedback.value] || 0) + 1;
@@ -47,9 +50,11 @@ function reduceGroup(array: IFeedbackByTrack[]) {
 }
 
 function FeedbackStatsView({ feedbackData }: FeedbackStatsViewProps) {
+
   const valueCountsStart = reduceGroup(
     feedbackData.filter((item) => item.group === 'START')
   );
+
   const valueCountsEnd = reduceGroup(
     feedbackData.filter((item) => item.group === 'END')
   );
@@ -58,6 +63,7 @@ function FeedbackStatsView({ feedbackData }: FeedbackStatsViewProps) {
   const combinedData = feelings.map(
     (feeling) => valueCountsStart[feeling.value] || 0
   );
+
   const combinedDataEnd = feelings.map(
     (feeling) => valueCountsEnd[feeling.value] || 0
   );
@@ -73,6 +79,7 @@ function FeedbackStatsView({ feedbackData }: FeedbackStatsViewProps) {
     ],
   };
 
+
   const barDataEnd = {
     labels,
     datasets: [
@@ -87,6 +94,7 @@ function FeedbackStatsView({ feedbackData }: FeedbackStatsViewProps) {
   if (barData.datasets[0].data.every((value) => value === 0)) {
     return <div className='flex items-center justify-center'>Sem dados</div>;
   }
+  console.log("FeedbackStatsView linha 108");
 
   return (
     <div className='w-full flex flex-col gap-2'>

@@ -1,15 +1,10 @@
 'use client';
-
-import TrackStatsView from '@/components/StatsView/TrackStatsView';
-
-import StudentStatsView from '@/components/StatsView/StudentStatsView';
-import {
-  getFeedbackByTrackService,
-  getTrackUsersSummaryService,
-} from '@/services/tracks';
-import { useEffect, useState } from 'react';
-
 import FeedbackStatsView from '@/components/StatsView/FeedbackStatsView';
+import StudentStatsView from '@/components/StatsView/StudentStatsView';
+import TrackStatsView from '@/components/StatsView/TrackStatsView';
+import { getFeedbackByTrackService, getTrackUsersSummaryService } from '@/services/tracks';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 function ViewTrackDataPage({ params: { id } }) {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -41,6 +36,18 @@ function ViewTrackDataPage({ params: { id } }) {
       <h1 className='text-2xl font-bold md:hidden text-center'>
         Use a versão desktop para visualização dos dados
       </h1>
+
+      {/* Botão de link para o relatório */}
+      <div className='hidden md:flex justify-end'>
+        <Link
+          href={`/professor/trilhas/estatisticas/${id}/relatorio`}
+          className='bg-[#1ba48a] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#168f76] transition-colors'
+        >
+          Ver Relatório
+        </Link>
+      </div>
+
+      {/* Botões de navegação */}
       <div className='hidden md:flex items-center gap-4 border-b border-b-gray-300 py-2'>
         <button
           className={`font-semibold text-base px-2 py-1 rounded-lg duration-300 ${selectedTab === 0 ? 'bg-[#1ba48a] text-white' : 'hover:bg-[#1ba48b38]'}`}
@@ -61,6 +68,8 @@ function ViewTrackDataPage({ params: { id } }) {
           <span>Estatísticas de afetividade</span>
         </button>
       </div>
+
+      {/* Conteúdo das tabs */}
       <div className='w-full hidden md:block'>
         {selectedTab === 0 && trackViewData ? (
           <TrackStatsView data={trackViewData} />

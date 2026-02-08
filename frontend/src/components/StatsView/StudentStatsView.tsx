@@ -41,27 +41,28 @@ function StudentStatsView({ data }: StudentStatsViewProps) {
 
     const notAnsweredCount = student.notAnswered ? 1 : 0;
     notAnsweredPercentageData.push((notAnsweredCount / totalAttempts) * 100);
+
   });
 
   const chartData = {
     labels: studentNames,
     datasets: [
       {
-        label: 'Tentativas corretas',
+        label: 'Submissões aprovadas no teste',
         data: correctPercentageData,
         backgroundColor: 'rgba(75, 192, 192)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Tentativas incorretas',
+        label: 'Submissões reprovadas no teste',
         data: incorrectPercentageData,
         backgroundColor: 'rgba(255, 99, 132)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Tentativas com erro',
+        label: 'Submissões com erro de execução',
         data: errorPercentageData,
         backgroundColor: 'rgba(255, 206, 86)',
         borderColor: 'rgba(255, 206, 86, 1)',
@@ -98,7 +99,7 @@ function StudentStatsView({ data }: StudentStatsViewProps) {
       },
       title: {
         display: true,
-        text: 'Tentativas por aluno (%)',
+        text: 'Submissões por aluno (%)',
       },
     },
     scales: {

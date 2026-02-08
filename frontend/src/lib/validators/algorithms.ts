@@ -22,5 +22,5 @@ export const createAlgorithmSchema = z.object({
 
 export const createAlgorithmTestSchema = z.object({
   input: z.string(),
-  output: z.string().trim().min(1, { message: 'Outpur é obrigatório' }),
+  output: z.string().trim().min(1, { message: 'Output é obrigatório' }),
 });
